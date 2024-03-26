@@ -14,7 +14,7 @@ def weights_init(m):
         w_bound = np.sqrt(6. / (fan_in + fan_out))
         m.weight.data.uniform_(-w_bound, w_bound)
         m.bias.data.fill_(0)
-        print("inital  linear weight ")
+        #print("inital  linear weight ")
 
 
 class word_embedding(nn.Module):
@@ -46,8 +46,7 @@ class RNN_model(nn.Module):
         # the lstm should have two layers, and the  input and output tensors are provided as (batch, seq, feature)
         # ???
 
-
-
+        self.rnn_lstm = nn.LSTM(input_size=embedding_dim, hidden_size=lstm_hidden_dim, num_layers=2, batch_first=True)
         ##########################################
         self.fc = nn.Linear(lstm_hidden_dim, vocab_len )
         self.apply(weights_init) # call the weights initial function.
@@ -61,9 +60,7 @@ class RNN_model(nn.Module):
         # here you need to put the "batch_input"  input the self.lstm which is defined before.
         # the hidden output should be named as output, the initial hidden state and cell state set to zero.
         # ???
-
-
-
+        output, _ = self.rnn_lstm(batch_input)  # Apply LSTM
 
         ################################################
         out = output.contiguous().view(-1,self.lstm_dim)
@@ -80,3 +77,4 @@ class RNN_model(nn.Module):
         # print(out)
         return output
 
+ 
